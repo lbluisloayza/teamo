@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Para Ti ❤️</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: black;
+      color: white;
+      text-align: center;
+      scroll-behavior: smooth;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    .container {
+      padding: 40px 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h1 {
+      animation: fadeDown 1.5s ease;
+    }
+
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      background: pink;
+      cursor: pointer;
+      font-size: 16px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 10px pink;
+    }
+
+    .hidden {
+      display: none;
+      margin-top: 20px;
+    }
+
+    #carta {
+      max-width: 400px;
+      margin: 30px auto;
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 15px;
+      animation: fadeIn 1s ease;
+    }
+
+    .galeria {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .galeria img {
+      width: 100%;
+      border-radius: 15px;
+      transition: transform 0.4s, opacity 0.4s;
+      opacity: 0;
+    }
+
+    .galeria img.visible {
+      opacity: 1;
+    }
+
+    .galeria img:hover {
+      transform: scale(1.1);
+    }
+
+    input {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      margin-top: 10px;
+    }
+
+    audio {
+      margin-top: 20px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+  </style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<div class="container">
+  <h1>Para el amor de mi vida ❤️</h1>
+
+  <p id="contador"></p>
+
+  <button onclick="mostrarMensaje(1)">Presióname 💌</button>
+  <button onclick="mostrarMensaje(2)">Otro secreto 💖</button>
+
+  <div id="mensaje1" class="hidden">Eres lo mejor que me ha pasado en la vida 💕</div>
+  <div id="mensaje2" class="hidden">Te amo como no te lo imaginas; siempre juntitos 🌹</div>
+
+  <br><br>
+
+  <input type="password" id="clave" placeholder="Ingresa la clave">
+  <br>
+  <button onclick="verCarta()">Ver carta</button>
+
+  <div id="carta" class="hidden">
+    <p>
+      Aquí va tu carta personalizada 💖
+    </p>
+  </div>
+
+  <div class="galeria">
+    <img src="foto1.jpeg">
+    <img src="foto2.jpeg">
+    <img src="foto3.jpeg">
+  </div>
+
+  <audio controls autoplay loop>
+    <source src="musica.mp3" type="audio/mpeg">
+  </audio>
+</div>
+
+<script>
+  // ⭐ Fondo de estrellas
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let stars = [];
+
+  for (let i = 0; i < 200; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 2
+    });
+  }
+
+  function drawStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = 'white';
+    stars.forEach(s => {
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    requestAnimationFrame(drawStars);
+  }
+
+  drawStars();
+
+  // ❤️ Botones
+  function mostrarMensaje(num) {
+    document.getElementById('mensaje' + num).classList.toggle('hidden');
+  }
+
+  // 🔒 Carta con clave
+  function verCarta() {
+    let clave = document.getElementById('clave').value;
+    if (clave === '0508') {
+      const carta = document.getElementById('carta');
+      carta.classList.remove('hidden');
+      carta.style.animation = 'fadeIn 1s ease';
+      carta.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      alert('Clave incorrecta');
+    }
+  }
+
+  // ⏳ Contador de días
+  const inicio = new Date('2025-05-08');
+  const hoy = new Date();
+
+  const diff = Math.floor((hoy - inicio) / (1000 * 60 * 60 * 24));
+
+  document.getElementById('contador').innerText =
+    'Llevamos ' + diff + ' días juntitos ❤️';
+
+  // ✨ Animación imágenes al hacer scroll
+  const imagenes = document.querySelectorAll('.galeria img');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  });
+
+  imagenes.forEach(img => observer.observe(img));
+
+</script>
+
+</body>
+</html>
